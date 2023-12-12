@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Shopping List!</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('christmas-trees.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        #app {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #c62828;
+            text-align: center;
+        }
+
+        label {
+            color: #2e7d32;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #2e7d32;
+        }
+
+        button {
+            background-color: #c62828;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: calc(100% - 20px);
+        }
+
+        button:hover {
+            background-color: #8e0000;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #e0f2f1;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1> Christmas Shopping List</h1>
+
+        <!-- Task input with HTML attribute validation -->
+        <form id="taskForm">
+            <label for="taskInput">Add something to buy:</label>
+            <input type="text" id="taskInput" name="taskInput" placeholder="(min length: 3)" required minlength="3">
+            <button type="button" id="addButton" onclick="addTask()">Add</button>
+        </form>
+
+        <h2>Item</h2>
+        <ul id="taskList"></ul>
+
+        <h2>Completed</h2>
+        <ul id="completedList"></ul>
+    </div>
+
+    <script>
+        // Function to add a new task
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskList = document.getElementById('taskList');
+
+            if (taskInput.checkValidity() && taskInput.value.trim() !== '') {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <input type="checkbox" onchange="completeTask(this)">
+                    <span>${taskInput.value}</span>
+                    <button onclick="removeTask(this)">Remove</button>
+                `;
+                taskList.appendChild(li);
+                taskInput.value = '';
+            }
+        }
+
+        // Function to handle the "Enter" key in the task input
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        }
+
+        // Function to mark a task as completed
+        function completeTask(checkbox) {
+            const taskItem = checkbox.parentElement;
+            const completedList = document.getElementById('completedList');
+            const taskList = document.getElementById('taskList');
+
+            if (checkbox.checked) {
+                taskItem.classList.add('completed');
+                completedList.appendChild(taskItem);
+            } else {
+                taskItem.classList.remove('completed');
+                taskList.appendChild(taskItem);
+            }
+        }
+
+        // Function to remove a task
+        function removeTask(button) {
+            const taskItem = button.parentElement;
+            taskItem.remove();
+        }
+
+        // Event listeners
+        document.getElementById('addButton').addEventListener('click', addTask);
+        document.getElementById('taskInput').addEventListener('keydown', handleEnterKey);
+    </script>
+</body>
+</html>
